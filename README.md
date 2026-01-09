@@ -1,51 +1,30 @@
-# Portfolio
+# Portfolio creation
 
-## Requirements
+*Automatically synced with your [v0.app](https://v0.app) deployments*
 
-* Node.js **18** or higher
-* `three` **0.150.x** with `@react-three/fiber` **8.x**, `@react-three/drei` **9.x`
-  and `@react-three/rapier` **1.x** – newer major versions of these
-  packages require React 19
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/paros-projects-7b9c261c/v0-portofolio)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/dYSqrXKWBdg)
 
-After cloning the repository, install Git LFS and enable it:
+## Overview
 
-```bash
-./scripts/setup-git-lfs.sh
-```
+This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
+Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
 
-## Environment Variables
+## Deployment
 
-Copy `.env.example` to `.env` and populate your EmailJS configuration:
+Your project is live at:
 
-```bash
-cp .env.example .env
-```
+**[https://vercel.com/paros-projects-7b9c261c/v0-portofolio](https://vercel.com/paros-projects-7b9c261c/v0-portofolio)**
 
-## Development
+## Build your app
 
-* `npm run dev` to start the local server.
-* `npm test` or `npx vitest` to run tests.
-* `npm run build` to create a production build.
+Continue building your app on:
 
+**[https://v0.app/chat/dYSqrXKWBdg](https://v0.app/chat/dYSqrXKWBdg)**
 
-## Git LFS Setup
+## How It Works
 
-Install Git LFS before cloning so that the textures download properly. On macOS use:
-
-```bash
-brew install git-lfs
-```
-
-On Debian/Ubuntu use:
-
-```bash
-apt install git-lfs
-```
-
-After installing, run:
-
-```bash
-git lfs install
-```
-
-The textures in `public/textures/` are tracked with Git LFS and require LFS to pull successfully.
+1. Create and modify your project using [v0.app](https://v0.app)
+2. Deploy your chats from the v0 interface
+3. Changes are automatically pushed to this repository
+4. Vercel deploys the latest version from this repository
