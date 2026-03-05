@@ -1,0 +1,121 @@
+[
+  {
+    "id": "pere-riche-pere-pauvre",
+    "title": "Père riche, père pauvre",
+    "author": "Robert T. Kiyosaki",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2023,
+    "pages": 336,
+    "tags": ["argent", "mindset", "business"],
+    "description": "Un classique qui pousse à revoir son rapport à l’argent et à comprendre la logique des actifs.",
+    "notes": "La discipline financière quotidienne compte plus que les gros coups ponctuels.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "tout-le-monde-na-pas-eu-la-chance-de-rater-ses-etudes",
+    "title": "Tout le monde n’a pas eu la chance de rater ses études",
+    "author": "Olivier Roland",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2024,
+    "pages": 256,
+    "tags": ["mindset", "apprentissage", "entrepreneuriat"],
+    "description": "Une invitation à apprendre autrement et à construire des compétences utiles hors du cadre classique.",
+    "notes": "Apprendre à apprendre reste un multiplicateur de résultats sur toute une carrière.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "tout-le-monde-na-pas-eu-la-chance-de-quitter-son-pays",
+    "title": "Tout le monde n’a pas eu la chance de quitter son pays",
+    "author": "Olivier Roland",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2024,
+    "pages": 220,
+    "tags": ["voyage", "liberte", "mindset"],
+    "description": "Un livre sur l’ouverture, la mobilité et le fait de créer un mode de vie aligné avec ses valeurs.",
+    "notes": "Changer d’environnement force à progresser plus vite sur le plan personnel.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "lalchimiste",
+    "title": "L’Alchimiste",
+    "author": "Paulo Coelho",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2022,
+    "pages": 192,
+    "tags": ["fiction", "quete", "spiritualite"],
+    "description": "Une fable sur la quête de sens, l’intuition et la persévérance face aux obstacles.",
+    "notes": "Le chemin apprend souvent davantage que l’objectif final.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "les-48-lois-du-pouvoir",
+    "title": "Les 48 lois du pouvoir",
+    "author": "Robert Greene",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2025,
+    "pages": 544,
+    "tags": ["strategie", "psychologie", "influence"],
+    "description": "Un recueil de principes de stratégie et d’influence à lire avec recul et esprit critique.",
+    "notes": "Comprendre les dynamiques de pouvoir aide à mieux se positionner sans perdre ses valeurs.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "oeuvres-dal-ghazali-selection",
+    "title": "Œuvres d’Al Ghazali (sélection)",
+    "author": "Al Ghazali",
+    "status": "reading",
+    "language": "fr",
+    "yearRead": null,
+    "pages": null,
+    "tags": ["spiritualite", "ethique", "reflection"],
+    "description": "Une lecture progressive autour de l’éthique, de l’introspection et de la discipline intérieure.",
+    "notes": "Lecture en cours : relire lentement certains passages pour mieux intégrer les idées.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  },
+  {
+    "id": "elon-musk-walter-isaacson",
+    "title": "Elon Musk",
+    "author": "Walter Isaacson",
+    "status": "read",
+    "language": "fr",
+    "yearRead": 2025,
+    "pages": 688,
+    "tags": ["biographie", "tech", "business"],
+    "description": "Une biographie dense qui retrace la vision, l’intensité et les contradictions d’Elon Musk.",
+    "notes": "Le niveau d’exigence et la vitesse d’exécution ressortent comme facteurs majeurs.",
+    "cover": {
+      "type": "generated",
+      "url": null,
+      "path": null
+    }
+  }
+]

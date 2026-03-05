@@ -1,0 +1,50 @@
+{
+  "identite": {
+    "nom": "Karim Hammouche",
+    "site": "https://www.karimhammouche.com"
+  },
+  "stack": [
+    "Next.js 14",
+    "TypeScript",
+    "React (App Router)",
+    "Tailwind",
+    "Framer Motion",
+    "Supabase",
+    "Stripe",
+    "EmailJS",
+    "Vercel",
+    "Netlify",
+    "Cloudflare",
+    "three@0.150.x",
+    "@react-three/fiber@8.x",
+    "drei@9.x",
+    "rapier@1.x"
+  ],
+  "projets": [
+    {
+      "nom": "KR Global Solutions LTD",
+      "lien": "https://www.krglobalsolutionsltd.com"
+    },
+    {
+      "nom": "KHH Global Projects",
+      "description": "Immobilier Maroc"
+    },
+    {
+      "nom": "The Hand DAO"
+    },
+    {
+      "nom": "Vintage Maroc",
+      "description": "nom de code"
+    }
+  ],
+  "focus": [
+    "IA & automatisation",
+    "Web apps",
+    "Ops & logistique",
+    "Immobilier Maroc"
+  ],
+  "contact": {
+    "email": "karim.hammouche1995@gmail.com",
+    "page": "/contact"
+  }
+}
