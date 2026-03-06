@@ -51,23 +51,21 @@ export default function PortfolioCopilot({ className }: PortfolioCopilotProps) {
     const timeoutId = window.setTimeout(() => controller.abort(), 20000);
 
     try {
-      const response = await fetch("/api/assistant", {
+      const res = await fetch("/api/copilot", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: trimmedQuestion }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: trimmedQuestion }),
         signal: controller.signal,
       });
 
-      const data = (await response.json()) as { reply?: string; error?: string };
+      const data = (await res.json()) as { answer?: string; error?: string };
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error(data.error ?? FALLBACK_ERROR);
       }
 
-      const reply = data.reply?.trim() ? data.reply : FALLBACK_ERROR;
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      const answer = data.answer?.trim() ? data.answer : FALLBACK_ERROR;
+      setMessages((m) => [...m, { role: "assistant", content: answer }]);
     } catch (error) {
       const message = error instanceof Error ? error.message : FALLBACK_ERROR;
       setErrorMessage(message);
