@@ -17,7 +17,7 @@ export async function getPublicCertifications() {
 
 export async function createCertification(payload: CertificationInsert) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('certifications').insert(payload).select('*').single();
+  const { data, error } = await admin.from('certifications').insert(payload as any).select('*').single();
   if (error) throw error;
   return data;
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion, type Variants } from "framer-motion"
 
 const skills = [
   "Technical Maintenance",
@@ -77,18 +77,18 @@ export function Skills() {
     y: 0,
   })
 
-  const container = {
+  const container: Variants = {
     hidden: {},
     show: {
       transition: reduceMotion ? {} : { staggerChildren: 0.03, delayChildren: 0.05 },
     },
   }
 
-  const item = {
+  const item: Variants = {
     hidden: reduceMotion ? { opacity: 1 } : { opacity: 0, y: 6 },
     show: reduceMotion
       ? { opacity: 1 }
-      : { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" } },
+      : { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0, 0, 0.2, 1] } },
   }
 
   const openTooltip = (label: string, e: React.MouseEvent | React.FocusEvent) => {

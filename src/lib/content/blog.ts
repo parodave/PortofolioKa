@@ -17,7 +17,7 @@ export async function getPublishedBlogPosts() {
 
 export async function createBlogPost(payload: BlogInsert) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('blog_posts').insert(payload).select('*').single();
+  const { data, error } = await admin.from('blog_posts').insert(payload as any).select('*').single();
   if (error) throw error;
   return data;
 }

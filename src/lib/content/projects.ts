@@ -18,7 +18,7 @@ export async function getFeaturedProjects() {
 
 export async function updateProject(id: string, payload: ProjectUpdate) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('projects').update(payload).eq('id', id).select('*').single();
+  const { data, error } = await (admin as any).from('projects').update(payload).eq('id', id).select('*').single();
   if (error) throw error;
   return data;
 }

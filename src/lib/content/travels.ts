@@ -13,7 +13,7 @@ export async function getTravelEntries() {
 
 export async function createTravelEntry(payload: TravelInsert) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('travel_entries').insert(payload).select('*').single();
+  const { data, error } = await admin.from('travel_entries').insert(payload as any).select('*').single();
   if (error) throw error;
   return data;
 }
