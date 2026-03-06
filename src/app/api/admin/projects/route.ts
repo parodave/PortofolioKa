@@ -1,48 +1,44 @@
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { createSupabaseAdminClient } from '@/src/lib/supabase/admin';
+import { createProject, listProjects, removeProject, updateProject } from '@/src/lib/admin/projects';
+import { getIdFromRequest, jsonError, jsonSuccess } from '@/src/lib/admin/http';
+import { requireAdminToken } from '@/src/lib/admin/requireAdminToken';
+import { projectCreateSchema, projectUpdateSchema } from '@/src/lib/admin/schemas';
 
-const schema = z.object({
-  profile_id: z.string().uuid(),
-  name: z.string().min(1),
-  slug: z.string().min(1),
-  project_type: z.string().nullable().optional(),
-  status: z.enum(['draft', 'active', 'completed', 'archived', 'published']).optional(),
-  short_summary: z.string().nullable().optional(),
-  full_description: z.string().nullable().optional(),
-  stack: z.array(z.string()).optional(),
-  tags: z.array(z.string()).optional(),
-  featured: z.boolean().optional(),
-});
-
-// Payload example: {"profile_id":"uuid","name":"KR Global Solutions LTD","slug":"kr-global-solutions-ltd"}
-export async function GET() {
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('projects').select('*').order('updated_at', { ascending: false });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data });
+export async function GET(req: Request) {
+  try {
+    requireAdminToken(req);
+    return jsonSuccess(await listProjects());
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function POST(req: Request) {
-  const input = schema.parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('projects').insert(input).select('*').single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data }, { status: 201 });
+  try {
+    requireAdminToken(req);
+    const payload = projectCreateSchema.parse(await req.json());
+    return jsonSuccess(await createProject(payload), 201);
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function PATCH(req: Request) {
-  const { id, ...payload } = z.object({ id: z.string().uuid() }).merge(schema.partial()).parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('projects').update(payload).eq('id', id).select('*').single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data });
+  try {
+    requireAdminToken(req);
+    const id = getIdFromRequest(req);
+    const payload = projectUpdateSchema.parse(await req.json());
+    return jsonSuccess(await updateProject(id, payload));
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function DELETE(req: Request) {
-  const { id } = z.object({ id: z.string().uuid() }).parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { error } = await admin.from('projects').delete().eq('id', id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ success: true });
+  try {
+    requireAdminToken(req);
+    const id = getIdFromRequest(req);
+    return jsonSuccess(await removeProject(id));
+  } catch (error) {
+    return jsonError(error);
+  }
 }

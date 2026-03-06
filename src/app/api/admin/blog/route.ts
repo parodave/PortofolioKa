@@ -1,51 +1,45 @@
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { createSupabaseAdminClient } from '@/src/lib/supabase/admin';
+// POST /api/admin/blog example: {"title":"How AI changed my vision of entrepreneurship","excerpt":"Why AI made my old ideas suddenly executable.","content_md":"# Title\n\nArticle content...","status":"draft","language":"en","featured":true}
+import { createBlogPost, listBlogPosts, removeBlogPost, updateBlogPost } from '@/src/lib/admin/blog';
+import { getIdFromRequest, jsonError, jsonSuccess } from '@/src/lib/admin/http';
+import { requireAdminToken } from '@/src/lib/admin/requireAdminToken';
+import { blogPostCreateSchema, blogPostUpdateSchema } from '@/src/lib/admin/schemas';
 
-const schema = z.object({
-  profile_id: z.string().uuid(),
-  category_id: z.string().uuid().nullable().optional(),
-  title: z.string().min(1),
-  slug: z.string().min(1),
-  excerpt: z.string().nullable().optional(),
-  content_md: z.string().nullable().optional(),
-  content_html: z.string().nullable().optional(),
-  status: z.enum(['draft', 'scheduled', 'published', 'archived']).optional(),
-  published: z.boolean().optional(),
-  published_at: z.string().datetime().nullable().optional(),
-  featured: z.boolean().optional(),
-  author_name: z.string().nullable().optional(),
-  allow_audio: z.boolean().optional(),
-});
-
-// Payload example: {"profile_id":"uuid","title":"Post","slug":"post"}
-export async function GET() {
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('blog_posts').select('*, blog_categories(*)').order('updated_at', { ascending: false });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data });
+export async function GET(req: Request) {
+  try {
+    requireAdminToken(req);
+    return jsonSuccess(await listBlogPosts());
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function POST(req: Request) {
-  const input = schema.parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('blog_posts').insert(input).select('*').single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data }, { status: 201 });
+  try {
+    requireAdminToken(req);
+    const payload = blogPostCreateSchema.parse(await req.json());
+    return jsonSuccess(await createBlogPost(payload), 201);
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function PATCH(req: Request) {
-  const { id, ...payload } = z.object({ id: z.string().uuid() }).merge(schema.partial()).parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('blog_posts').update(payload).eq('id', id).select('*').single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data });
+  try {
+    requireAdminToken(req);
+    const id = getIdFromRequest(req);
+    const payload = blogPostUpdateSchema.parse(await req.json());
+    return jsonSuccess(await updateBlogPost(id, payload));
+  } catch (error) {
+    return jsonError(error);
+  }
 }
 
 export async function DELETE(req: Request) {
-  const { id } = z.object({ id: z.string().uuid() }).parse(await req.json());
-  const admin = createSupabaseAdminClient();
-  const { error } = await admin.from('blog_posts').delete().eq('id', id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ success: true });
+  try {
+    requireAdminToken(req);
+    const id = getIdFromRequest(req);
+    return jsonSuccess(await removeBlogPost(id));
+  } catch (error) {
+    return jsonError(error);
+  }
 }
