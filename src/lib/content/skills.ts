@@ -13,7 +13,7 @@ export async function getPublicSkills() {
 
 export async function createSkill(payload: SkillInsert) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('skills').insert(payload).select('*').single();
+  const { data, error } = await admin.from('skills').insert(payload as any).select('*').single();
   if (error) throw error;
   return data;
 }

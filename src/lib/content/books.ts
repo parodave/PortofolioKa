@@ -13,7 +13,7 @@ export async function getBookLibrary() {
 
 export async function createBook(payload: BookInsert) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('books').insert(payload).select('*').single();
+  const { data, error } = await admin.from('books').insert(payload as any).select('*').single();
   if (error) throw error;
   return data;
 }

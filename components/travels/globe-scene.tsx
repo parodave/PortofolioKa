@@ -24,7 +24,7 @@ function latLngToPosition(lat: number, lng: number, radius: number): [number, nu
 
 function Particles() {
   const count = 1000
-  const particlesRef = useRef<THREE.Points>(null)
+  const particlesRef = useRef<any>(null)
 
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -56,12 +56,12 @@ function Particles() {
 }
 
 function PulseRing() {
-  const ringRef = useRef<THREE.Mesh>(null)
+  const ringRef = useRef<any>(null)
   useFrame((state) => {
     if (ringRef.current) {
       const scale = 1 + Math.sin(state.clock.elapsedTime * 4) * 0.3
       ringRef.current.scale.setScalar(scale)
-      const material = ringRef.current.material as THREE.MeshBasicMaterial
+      const material = ringRef.current.material as any
       material.opacity = 0.5 - Math.sin(state.clock.elapsedTime * 4) * 0.3
     }
   })
@@ -98,7 +98,7 @@ function CountryMarker({
       
       {/* Point blanc au centre (on garde le blanc pour le contraste) */}
       <mesh
-        onPointerOver={(e) => {
+        onPointerOver={(e: any) => {
           e.stopPropagation()
           onHover(country)
           document.body.style.cursor = "pointer"
@@ -107,7 +107,7 @@ function CountryMarker({
           onHover(null)
           document.body.style.cursor = "auto"
         }}
-        onClick={(e) => {
+        onClick={(e: any) => {
           e.stopPropagation()
           onClick(country)
         }}
@@ -150,7 +150,7 @@ function Continents() {
 }
 
 function Globe({ countries, onCountryClick, onCountryHover, hoveredCountry }: GlobeSceneProps) {
-  const globeRef = useRef<THREE.Group>(null)
+  const globeRef = useRef<any>(null)
   const [isHoveringMarker, setIsHoveringMarker] = useState(false)
 
   useFrame((state) => {
