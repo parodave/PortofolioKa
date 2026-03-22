@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BlogNavbar } from "@/components/blog/blog-navbar"
 import { AudioPlayer } from "@/components/blog/AudioPlayer"
+import { BlogMarkdown } from "@/components/blog/blog-markdown"
 import { getBlogArticle, getBlogSlugs } from "@/lib/blog"
 import { getCachedAudioUrl, hashText, stripMarkdown } from "@/lib/tts"
 import { absoluteUrl, parseFrenchDateToIso } from "@/lib/seo"
@@ -72,6 +73,11 @@ export default async function ArticlePage({ params }: BlogPageProps) {
   const voiceId = process.env.ELEVENLABS_VOICE_ID || ""
   const contentHash = hashText(plainText)
   const initialAudioUrl = voiceId ? await getCachedAudioUrl(slug, contentHash, voiceId) : null
+  const displayDate = new Date(article.date).toLocaleDateString("fr-FR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -107,9 +113,14 @@ export default async function ArticlePage({ params }: BlogPageProps) {
         </Button>
 
         <header className="mb-8">
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-4 flex flex-wrap items-center gap-3">
             <span className="text-sm font-medium text-primary">{article.category}</span>
-            <time className="text-sm text-muted-foreground">{article.date}</time>
+            <time className="text-sm text-muted-foreground">{displayDate}</time>
+            {article.tags?.map((tag) => (
+              <span key={tag} className="rounded-full border px-2 py-0.5 text-xs text-primary">
+                {tag}
+              </span>
+            ))}
           </div>
           <h1 className="mb-4 text-balance text-3xl font-bold tracking-tight md:text-4xl">{article.title}</h1>
           <p className="text-lg text-muted-foreground">{article.description}</p>
@@ -121,9 +132,7 @@ export default async function ArticlePage({ params }: BlogPageProps) {
           <Image src={article.image || "/placeholder.svg"} alt={article.title} fill className="object-cover" priority />
         </div>
 
-        <div className="prose prose-neutral max-w-none dark:prose-invert">
-          <p className="whitespace-pre-line text-muted-foreground">{article.content}</p>
-        </div>
+        <BlogMarkdown content={article.content} />
       </article>
     </main>
   )
