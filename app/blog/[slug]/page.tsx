@@ -1,5 +1,7 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
+import { notFound } from "next/navigation"
 import { ArrowLeftIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BlogNavbar } from "@/components/blog/blog-navbar"
@@ -7,22 +9,64 @@ import { AudioPlayer } from "@/components/blog/AudioPlayer"
 import { BlogMarkdown } from "@/components/blog/blog-markdown"
 import { getBlogArticle, getBlogSlugs } from "@/lib/blog"
 import { getCachedAudioUrl, hashText, stripMarkdown } from "@/lib/tts"
+import { absoluteUrl, parseFrenchDateToIso } from "@/lib/seo"
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+interface BlogPageProps {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params
   const article = getBlogArticle(slug)
 
   if (!article) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold">Article non trouvé</h1>
-          <Button asChild>
-            <Link href="/blog">Retour au blog</Link>
-          </Button>
-        </div>
-      </main>
-    )
+    return {
+      title: "Article non trouvé",
+      description: "L'article demandé n'existe pas ou n'est plus disponible.",
+      robots: { index: false, follow: false },
+    }
+  }
+
+  const canonicalPath = `/blog/${slug}`
+
+  return {
+    title: article.title,
+    description: article.description,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    keywords: [article.category, "blog", "Karim Hammouche", "portfolio"],
+    openGraph: {
+      type: "article",
+      url: absoluteUrl(canonicalPath),
+      title: article.title,
+      description: article.description,
+      images: [
+        {
+          url: absoluteUrl(article.image || "/placeholder.svg"),
+          alt: article.title,
+        },
+      ],
+      locale: "fr_FR",
+      authors: ["Karim Hammouche"],
+      publishedTime: parseFrenchDateToIso(article.date),
+      section: article.category,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.description,
+      images: [absoluteUrl(article.image || "/placeholder.svg")],
+    },
+  }
+}
+
+export default async function ArticlePage({ params }: BlogPageProps) {
+  const { slug } = await params
+  const article = getBlogArticle(slug)
+
+  if (!article) {
+    notFound()
   }
 
   const plainText = stripMarkdown(article.content)
@@ -35,8 +79,30 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     day: "numeric",
   })
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.description,
+    image: absoluteUrl(article.image || "/placeholder.svg"),
+    datePublished: parseFrenchDateToIso(article.date),
+    dateModified: parseFrenchDateToIso(article.date),
+    author: {
+      "@type": "Person",
+      name: "Karim Hammouche",
+      url: absoluteUrl("/"),
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Karim Hammouche",
+    },
+    mainEntityOfPage: absoluteUrl(`/blog/${slug}`),
+    articleSection: article.category,
+  }
+
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <BlogNavbar />
       <article className="mx-auto max-w-3xl px-6 py-12">
         <Button variant="ghost" size="sm" className="mb-8" asChild>
@@ -48,8 +114,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <header className="mb-8">
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            <span className="text-sm text-muted-foreground">{displayDate}</span>
-            {article.tags.map((tag) => (
+            <span className="text-sm font-medium text-primary">{article.category}</span>
+            <time className="text-sm text-muted-foreground">{displayDate}</time>
+            {article.tags?.map((tag) => (
               <span key={tag} className="rounded-full border px-2 py-0.5 text-xs text-primary">
                 {tag}
               </span>
@@ -62,7 +129,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <AudioPlayer slug={slug} text={plainText} initialUrl={initialAudioUrl} />
 
         <div className="relative mb-8 aspect-[2/1] overflow-hidden rounded-xl">
-          <Image src={article.image || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
+          <Image src={article.image || "/placeholder.svg"} alt={article.title} fill className="object-cover" priority />
         </div>
 
         <BlogMarkdown content={article.content} />
