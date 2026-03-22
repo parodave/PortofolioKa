@@ -16,8 +16,8 @@ export function BlogHeader() {
 
   return (
     <div className="mb-10">
-      <h1 className="text-4xl font-bold tracking-tight mb-2">Blog</h1>
-      <p className="text-muted-foreground mb-6">
+      <h1 id="blog-heading" className="mb-2 text-4xl font-bold tracking-tight">Blog</h1>
+      <p className="mb-6 text-muted-foreground">
         Mes articles et réflexions sur l'entrepreneuriat, la tech et le développement.
       </p>
       <div className="flex flex-wrap gap-2">
