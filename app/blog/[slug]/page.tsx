@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BlogNavbar } from "@/components/blog/blog-navbar"
 import { AudioPlayer } from "@/components/blog/AudioPlayer"
+import { BlogMarkdown } from "@/components/blog/blog-markdown"
 import { getBlogArticle, getBlogSlugs } from "@/lib/blog"
 import { getCachedAudioUrl, hashText, stripMarkdown } from "@/lib/tts"
 
@@ -28,6 +29,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || ""
   const contentHash = hashText(plainText)
   const initialAudioUrl = voiceId ? await getCachedAudioUrl(slug, contentHash, voiceId) : null
+  const displayDate = new Date(article.date).toLocaleDateString("fr-FR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 
   return (
     <main className="min-h-screen bg-background">
@@ -41,11 +47,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </Button>
 
         <header className="mb-8">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="text-sm font-medium text-primary">{article.category}</span>
-            <span className="text-sm text-muted-foreground">{article.date}</span>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="text-sm text-muted-foreground">{displayDate}</span>
+            {article.tags.map((tag) => (
+              <span key={tag} className="rounded-full border px-2 py-0.5 text-xs text-primary">
+                {tag}
+              </span>
+            ))}
           </div>
-          <h1 className="mb-4 text-3xl font-bold tracking-tight text-balance md:text-4xl">{article.title}</h1>
+          <h1 className="mb-4 text-balance text-3xl font-bold tracking-tight md:text-4xl">{article.title}</h1>
           <p className="text-lg text-muted-foreground">{article.description}</p>
         </header>
 
@@ -55,9 +65,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <Image src={article.image || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
         </div>
 
-        <div className="prose prose-neutral max-w-none dark:prose-invert">
-          <p className="whitespace-pre-line text-muted-foreground">{article.content}</p>
-        </div>
+        <BlogMarkdown content={article.content} />
       </article>
     </main>
   )
