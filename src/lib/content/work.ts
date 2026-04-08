@@ -17,7 +17,7 @@ export async function getPublicWorkExperiences() {
 
 export async function updateWorkExperience(id: string, payload: WorkUpdate) {
   const admin = createSupabaseAdminClient();
-  const { data, error } = await admin.from('work_experiences').update(payload).eq('id', id).select('*').single();
+  const { data, error } = await (admin as any).from('work_experiences').update(payload).eq('id', id).select('*').single();
   if (error) throw error;
   return data;
 }
