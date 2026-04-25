@@ -22,13 +22,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "HF_SPACE_ID is not configured" }, { status: 500 });
     }
 
-    const token = process.env.HF_TOKEN?.trim();
+    const token = process.env.HF_TOKEN?.trim() as `hf_${string}` | undefined;
     const client = token
-      ? await Client.connect(spaceId, { token: token as `hf_${string}` })
+      ? await Client.connect(spaceId, { token })
       : await Client.connect(spaceId);
 
     const result = await client.predict(0, [message, []]);
-    const firstData = Array.isArray(result.data) ? result.data[0] : undefined;
+    const responseData = Array.isArray(result.data) ? result.data : [];
+    const firstData = responseData[0];
     const reply = typeof firstData === "string" ? firstData : JSON.stringify(result.data);
 
     return NextResponse.json({ reply });

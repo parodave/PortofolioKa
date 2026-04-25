@@ -1,3 +1,4 @@
+import "server-only"
 import { createHash } from "node:crypto"
 import { getSupabaseAdminClient } from "@/lib/supabase-admin"
 
@@ -19,7 +20,7 @@ export function stripMarkdown(markdown: string) {
     .replace(/`[^`]*`/g, " ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/[#>*_~\-]+/g, " ")
+    .replace(/[#>*_~-]+/g, " ")
     .replace(/\r\n/g, "\n")
     .replace(/\n{2,}/g, "\n")
     .replace(/\s+/g, " ")

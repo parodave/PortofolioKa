@@ -50,13 +50,13 @@ function parseFrontMatter(rawFile: string) {
         .replace(/^\[/, "")
         .replace(/\]$/, "")
         .split(",")
-        .map((tag) => tag.trim().replace(/^['\"]|['\"]$/g, ""))
+        .map((tag) => tag.trim().replace(/^['"]|['"]$/g, ""))
         .filter(Boolean)
       frontMatter.tags = parsedTags
       continue
     }
 
-    const cleanValue = value.replace(/^['\"]|['\"]$/g, "")
+    const cleanValue = value.replace(/^['"]|['"]$/g, "")
 
     if (key === "title") frontMatter.title = cleanValue
     if (key === "description") frontMatter.description = cleanValue

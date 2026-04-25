@@ -205,14 +205,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ reply: RATE_LIMIT_REPLY }, { status: 429 });
   }
 
-  let body: { messages?: ChatMessage[] } | null = null;
+  let body: { messages?: ChatMessage[] };
   try {
     body = (await request.json()) as { messages?: ChatMessage[] };
   } catch {
     return NextResponse.json({ reply: SERVICE_UNAVAILABLE_REPLY }, { status: 400 });
   }
 
-  const messages = Array.isArray(body?.messages) ? body?.messages : [];
+  const messages = Array.isArray(body.messages) ? body.messages : [];
   const trimmedMessages = messages.slice(-MAX_HISTORY);
   const lastMessage = trimmedMessages[trimmedMessages.length - 1];
 
