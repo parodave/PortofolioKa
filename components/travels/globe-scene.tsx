@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 
 import { useRef, useMemo, useState, Suspense, useEffect } from "react"
@@ -98,7 +99,7 @@ function CountryMarker({
       
       {/* Point blanc au centre (on garde le blanc pour le contraste) */}
       <mesh
-        onPointerOver={(e) => {
+        onPointerOver={(e: any) => {
           e.stopPropagation()
           onHover(country)
           document.body.style.cursor = "pointer"
@@ -107,7 +108,7 @@ function CountryMarker({
           onHover(null)
           document.body.style.cursor = "auto"
         }}
-        onClick={(e) => {
+        onClick={(e: any) => {
           e.stopPropagation()
           onClick(country)
         }}

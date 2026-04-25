@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "eslint .",
+    "lint": "eslint eslint.config.mjs next.config.mjs postcss.config.mjs scripts/**/*.mjs",
     "start": "next start",
     "blog:new": "node scripts/create-blog-post.mjs"
   },

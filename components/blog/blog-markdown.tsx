@@ -1,3 +1,5 @@
+import type { ReactElement } from "react"
+
 interface BlogMarkdownProps {
   content: string
 }
@@ -13,7 +15,7 @@ function flushParagraph(paragraph: string[], key: string) {
 
 export function BlogMarkdown({ content }: BlogMarkdownProps) {
   const lines = content.split("\n")
-  const elements: JSX.Element[] = []
+  const elements: ReactElement[] = []
   let paragraph: string[] = []
   let listItems: string[] = []
 
