@@ -1,9 +1,12 @@
 ---
-slug: "ia-pour-creer-contenu"
 title: "Utiliser l'IA pour créer du contenu expert plus rapidement"
-description: "Un workflow éditorial pragmatique pour produire des articles de qualité avec l'aide de l'IA."
-date: "2025-12-12"
+slug: "ia-pour-creer-contenu"
+excerpt: "Un workflow éditorial pragmatique pour produire des articles de qualité avec l'aide de l'IA."
+category: "IA"
 tags: ["IA", "Contenu", "Marketing"]
+publishedAt: "2025-12-12"
+seoTitle: "Créer du contenu expert avec l'IA | Karim Hammouche"
+seoDescription: "Workflow éditorial pour accélérer la production d'articles experts avec l'IA, sans sacrifier la qualité."
 image: "/react-nextjs-javascript-code.jpg"
 ---
 

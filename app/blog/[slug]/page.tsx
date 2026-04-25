@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeftIcon } from "lucide-react"
@@ -7,6 +8,37 @@ import { AudioPlayer } from "@/components/blog/AudioPlayer"
 import { BlogMarkdown } from "@/components/blog/blog-markdown"
 import { getBlogArticle, getBlogSlugs } from "@/lib/blog"
 import { getCachedAudioUrl, hashText, stripMarkdown } from "@/lib/tts"
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const article = getBlogArticle(slug)
+
+  if (!article) {
+    return {
+      title: "Article non trouvé | Karim Hammouche",
+      description: "L'article demandé est introuvable.",
+    }
+  }
+
+  return {
+    title: article.seoTitle,
+    description: article.seoDescription,
+    openGraph: {
+      title: article.seoTitle,
+      description: article.seoDescription,
+      images: article.image ? [article.image] : undefined,
+      type: "article",
+      publishedTime: article.publishedAt,
+      tags: article.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.seoTitle,
+      description: article.seoDescription,
+      images: article.image ? [article.image] : undefined,
+    },
+  }
+}
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -29,7 +61,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || ""
   const contentHash = hashText(plainText)
   const initialAudioUrl = voiceId ? await getCachedAudioUrl(slug, contentHash, voiceId) : null
-  const displayDate = new Date(article.date).toLocaleDateString("fr-FR", {
+  const displayDate = new Date(article.publishedAt).toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -56,7 +88,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             ))}
           </div>
           <h1 className="mb-4 text-balance text-3xl font-bold tracking-tight md:text-4xl">{article.title}</h1>
-          <p className="text-lg text-muted-foreground">{article.description}</p>
+          <p className="text-lg text-muted-foreground">{article.excerpt}</p>
         </header>
 
         <AudioPlayer slug={slug} text={plainText} initialUrl={initialAudioUrl} />
