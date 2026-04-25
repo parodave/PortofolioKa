@@ -4,23 +4,47 @@ import { cache } from "react"
 
 const BLOG_CONTENT_DIR = path.join(process.cwd(), "content", "blog")
 
+export type BlogContentSource = "local_markdown"
+
 export interface BlogArticle {
-  slug: string
   title: string
+  slug: string
+  excerpt: string
+  content: string
+  category: string
+  tags: string[]
+  publishedAt: string
+  seoTitle: string
+  seoDescription: string
+  image: string
+  source: BlogContentSource
+  // Backward-compatible aliases used by existing UI components.
   description: string
   date: string
-  tags: string[]
-  image: string
-  content: string
 }
 
 interface FrontMatter {
   title?: string
-  description?: string
-  date?: string
-  tags?: string[]
-  image?: string
   slug?: string
+  excerpt?: string
+  description?: string
+  content?: string
+  category?: string
+  tags?: string[]
+  publishedAt?: string
+  date?: string
+  seoTitle?: string
+  seoDescription?: string
+  image?: string
+}
+
+function parseTags(rawValue: string) {
+  return rawValue
+    .replace(/^\[/, "")
+    .replace(/\]$/, "")
+    .split(",")
+    .map((tag) => tag.trim().replace(/^['\"]|['\"]$/g, ""))
+    .filter(Boolean)
 }
 
 function parseFrontMatter(rawFile: string) {
@@ -46,23 +70,22 @@ function parseFrontMatter(rawFile: string) {
     const value = rest.join(":").trim()
 
     if (key === "tags") {
-      const parsedTags = value
-        .replace(/^\[/, "")
-        .replace(/\]$/, "")
-        .split(",")
-        .map((tag) => tag.trim().replace(/^['\"]|['\"]$/g, ""))
-        .filter(Boolean)
-      frontMatter.tags = parsedTags
+      frontMatter.tags = parseTags(value)
       continue
     }
 
     const cleanValue = value.replace(/^['\"]|['\"]$/g, "")
 
     if (key === "title") frontMatter.title = cleanValue
-    if (key === "description") frontMatter.description = cleanValue
-    if (key === "date") frontMatter.date = cleanValue
-    if (key === "image") frontMatter.image = cleanValue
     if (key === "slug") frontMatter.slug = cleanValue
+    if (key === "excerpt") frontMatter.excerpt = cleanValue
+    if (key === "description") frontMatter.description = cleanValue
+    if (key === "category") frontMatter.category = cleanValue
+    if (key === "publishedAt") frontMatter.publishedAt = cleanValue
+    if (key === "date") frontMatter.date = cleanValue
+    if (key === "seoTitle") frontMatter.seoTitle = cleanValue
+    if (key === "seoDescription") frontMatter.seoDescription = cleanValue
+    if (key === "image") frontMatter.image = cleanValue
   }
 
   return { frontMatter, content }
@@ -73,18 +96,29 @@ function normalizeBlogArticle(filename: string, rawFile: string): BlogArticle {
   const fallbackSlug = filenameWithoutExt.replace(/^\d{4}-\d{2}-\d{2}-/, "")
   const { frontMatter, content } = parseFrontMatter(rawFile)
 
+  const title = frontMatter.title || fallbackSlug
+  const excerpt = frontMatter.excerpt || frontMatter.description || ""
+  const publishedAt = frontMatter.publishedAt || frontMatter.date || new Date().toISOString()
+
   return {
+    title,
     slug: frontMatter.slug || fallbackSlug,
-    title: frontMatter.title || fallbackSlug,
-    description: frontMatter.description || "",
-    date: frontMatter.date || new Date().toISOString(),
+    excerpt,
+    content: frontMatter.content || content,
+    category: frontMatter.category || "General",
     tags: frontMatter.tags || [],
+    publishedAt,
+    seoTitle: frontMatter.seoTitle || `${title} | Karim Hammouche`,
+    seoDescription: frontMatter.seoDescription || excerpt,
     image: frontMatter.image || "/placeholder.svg",
-    content,
+    source: "local_markdown",
+    // Backward-compatible aliases used by current UI.
+    description: excerpt,
+    date: publishedAt,
   }
 }
 
-const readBlogArticles = cache(() => {
+export const getAllBlogPosts = cache(() => {
   if (!fs.existsSync(BLOG_CONTENT_DIR)) {
     return [] as BlogArticle[]
   }
@@ -97,29 +131,25 @@ const readBlogArticles = cache(() => {
       const rawFile = fs.readFileSync(filePath, "utf8")
       return normalizeBlogArticle(file, rawFile)
     })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 })
 
-export function getAllBlogPosts() {
-  return readBlogArticles()
-}
+export const getBlogArticle = cache((slug: string) => {
+  return getAllBlogPosts().find((article) => article.slug === slug)
+})
 
-export function getBlogArticle(slug: string) {
-  return readBlogArticles().find((article) => article.slug === slug)
-}
-
-export function getBlogSlugs() {
-  return readBlogArticles().map((article) => article.slug)
-}
+export const getBlogSlugs = cache(() => {
+  return getAllBlogPosts().map((article) => article.slug)
+})
 
 export function getBlogTagsWithCount() {
   const counts = new Map<string, number>()
 
-  for (const post of readBlogArticles()) {
+  for (const post of getAllBlogPosts()) {
     for (const tag of post.tags) {
       counts.set(tag, (counts.get(tag) || 0) + 1)
     }
   }
 
-  return [{ name: "Tous", count: readBlogArticles().length }, ...Array.from(counts.entries()).map(([name, count]) => ({ name, count }))]
+  return [{ name: "Tous", count: getAllBlogPosts().length }, ...Array.from(counts.entries()).map(([name, count]) => ({ name, count }))]
 }

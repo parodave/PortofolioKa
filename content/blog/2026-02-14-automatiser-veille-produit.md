@@ -1,9 +1,12 @@
 ---
-slug: "automatiser-veille-produit"
 title: "Automatiser sa veille produit sans perdre son focus"
-description: "Une méthode concrète pour collecter, trier et transformer les signaux marché en décisions utiles."
-date: "2026-02-14"
+slug: "automatiser-veille-produit"
+excerpt: "Une méthode concrète pour collecter, trier et transformer les signaux marché en décisions utiles."
+category: "Produit"
 tags: ["Produit", "Automatisation", "Data"]
+publishedAt: "2026-02-14"
+seoTitle: "Automatiser sa veille produit | Karim Hammouche"
+seoDescription: "Méthode pratique pour transformer la veille produit en décisions actionnables, sans surcharge informationnelle."
 image: "/modern-saas-dashboard-dark-theme.jpg"
 ---
 

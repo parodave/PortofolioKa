@@ -1,9 +1,12 @@
 ---
-slug: "roadmap-technique-realiste"
 title: "Construire une roadmap technique réaliste pour une startup"
-description: "Comment prioriser les chantiers techniques sans ralentir la livraison des fonctionnalités métier."
-date: "2026-01-29"
+slug: "roadmap-technique-realiste"
+excerpt: "Comment prioriser les chantiers techniques sans ralentir la livraison des fonctionnalités métier."
+category: "Tech"
 tags: ["Tech", "Startup", "Architecture"]
+publishedAt: "2026-01-29"
+seoTitle: "Roadmap technique réaliste | Karim Hammouche"
+seoDescription: "Cadre concret pour prioriser les chantiers techniques et préserver la vitesse de livraison produit."
 image: "/futuristic-tech-company-saas-dashboard-dark.jpg"
 ---
 

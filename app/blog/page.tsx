@@ -1,10 +1,21 @@
+import type { Metadata } from "next"
 import { BlogHeader } from "@/components/blog/blog-header"
 import { BlogGrid } from "@/components/blog/blog-grid"
 import { BlogNavbar } from "@/components/blog/blog-navbar"
 
-export const metadata = {
-  title: "Blog | Khadija Hachimi",
-  description: "Articles et réflexions sur l'entrepreneuriat, la tech et le développement web.",
+export const metadata: Metadata = {
+  title: "Blog | Karim Hammouche",
+  description: "Articles et réflexions de Karim Hammouche sur l'entrepreneuriat, la tech et le développement web.",
+  openGraph: {
+    title: "Blog | Karim Hammouche",
+    description: "Articles et réflexions de Karim Hammouche sur l'entrepreneuriat, la tech et le développement web.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Karim Hammouche",
+    description: "Articles et réflexions de Karim Hammouche sur l'entrepreneuriat, la tech et le développement web.",
+  },
 }
 
 export default function BlogPage() {
@@ -16,7 +27,7 @@ export default function BlogPage() {
         <BlogGrid />
       </div>
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Khadija Hachimi. Tous droits réservés.
+        © {new Date().getFullYear()} Karim Hammouche. Tous droits réservés.
       </footer>
     </main>
   )
