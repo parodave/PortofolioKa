@@ -24,11 +24,11 @@ export async function POST(request: Request) {
 
     const token = process.env.HF_TOKEN?.trim();
     const client = token
-      ? await Client.connect(spaceId, { hf_token: token })
+      ? await Client.connect(spaceId, { token: token as `hf_${string}` })
       : await Client.connect(spaceId);
 
     const result = await client.predict(0, [message, []]);
-    const firstData = result.data?.[0];
+    const firstData = Array.isArray(result.data) ? result.data[0] : undefined;
     const reply = typeof firstData === "string" ? firstData : JSON.stringify(result.data);
 
     return NextResponse.json({ reply });

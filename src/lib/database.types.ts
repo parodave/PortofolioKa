@@ -95,5 +95,9 @@ export type Database = {
       quotes_or_notes: { Row: { id: string; profile_id: string; type: string; title: string | null; content: string; language: string; source_context: string | null; published_at: string | null; featured: boolean; created_at: string; updated_at: string }; Insert: Omit<Database['public']['Tables']['quotes_or_notes']['Row'], 'id' | 'created_at' | 'updated_at'> & { id?: string; created_at?: string; updated_at?: string }; Update: Partial<Database['public']['Tables']['quotes_or_notes']['Insert']> };
       copilot_knowledge_overrides: { Row: { id: string; profile_id: string; key: string; title: string | null; content: string; priority: number; is_active: boolean; created_at: string; updated_at: string }; Insert: Omit<Database['public']['Tables']['copilot_knowledge_overrides']['Row'], 'id' | 'created_at' | 'updated_at'> & { id?: string; created_at?: string; updated_at?: string }; Update: Partial<Database['public']['Tables']['copilot_knowledge_overrides']['Insert']> };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 };
